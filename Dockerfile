@@ -1,17 +1,15 @@
 FROM php:8.2-apache
 
-# Enable mod_rewrite and any other needed modules
+# Optional: suppress ServerName warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Optional: enable mod_rewrite (for frameworks, .htaccess, etc.)
 RUN a2enmod rewrite
 
-# Copy your files to the Apache web root
-COPY training_briefing.php /var/www/html/
+# Copy and rename the PHP file as index.php
+COPY training_briefing.php /var/www/html/index.php
 COPY timer.js /var/www/html/
 
-# Set proper permissions (optional but recommended)
-RUN chown -R www-data:www-data /var/www/html
-
-# Expose port 80
 EXPOSE 80
 
-# Use the default Apache entrypoint
 CMD ["apache2-foreground"]
